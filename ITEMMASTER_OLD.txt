@@ -1,0 +1,105 @@
+USE [023_RCS_ALIAGA_V10]
+GO
+/****** Object:  StoredProcedure [dbo].[RCS_EXTRACT_ITEMMASTER]    Script Date: 7/30/2024 3:25:21 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[RCS_EXTRACT_ITEMMASTER] AS
+BEGIN
+SELECT a.ItemCode[ItemCode], i.UomEntry[UomEntry], l.UomCode[UomCode], m.BaseQty[BaseQty], a.ItemName[ItemName], a.FrgnName[FrgnName], a.OnHand[OnHand], b.CardCode[CardCode], k.BcdCode[CodeBars],
+i.Price[CasePrice],x.price[GSP], g.Price[GPP], h.Price[GNP],
+CASE WHEN a.frozenFor = 'N' THEN 'No' ELSE 'Yes' END[frozenFor], d.WhsName, a.DfltWH, a.U_Division, a.U_Department, 
+a.U_Section, a.U_Category, a.U_Principal, f.UgpName, a.U_DiscFam, a.U_StandardMArkup, 
+CASE WHEN a.U_Traitflags_0 = '1' THEN 'YES' WHEN a.U_Traitflags_0 = 'Y' THEN 'YES' WHEN a.U_Traitflags_0 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_0], 
+CASE WHEN a.U_Traitflags_1 = '1' THEN 'YES' WHEN a.U_Traitflags_1 = 'Y' THEN 'YES' WHEN a.U_Traitflags_1 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_1], 
+CASE WHEN a.U_Traitflags_2 = '1' THEN 'YES' WHEN a.U_Traitflags_2 = 'Y' THEN 'YES' WHEN a.U_Traitflags_2 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_2], 
+CASE WHEN a.U_Traitflags_3 = '1' THEN 'YES' WHEN a.U_Traitflags_3 = 'Y' THEN 'YES' WHEN a.U_Traitflags_3 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_3], 
+CASE WHEN a.U_Traitflags_4 = '1' THEN 'YES' WHEN a.U_Traitflags_4 = 'Y' THEN 'YES' WHEN a.U_Traitflags_4 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_4], 
+CASE WHEN a.U_Traitflags_5 = '1' THEN 'YES' WHEN a.U_Traitflags_5 = 'Y' THEN 'YES' WHEN a.U_Traitflags_5 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_5], 
+CASE WHEN a.U_Traitflags_6 = '1' THEN 'YES' WHEN a.U_Traitflags_6 = 'Y' THEN 'YES' WHEN a.U_Traitflags_6 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_6], 
+CASE WHEN a.U_Traitflags_8 = '1' THEN 'YES' WHEN a.U_Traitflags_8 = 'Y' THEN 'YES' WHEN a.U_Traitflags_7 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_7], 
+CASE WHEN a.U_Traitflags_8 = '1' THEN 'YES' WHEN a.U_Traitflags_8 = 'Y' THEN 'YES' WHEN a.U_Traitflags_8 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_8], 
+CASE WHEN a.U_Traitflags_9 = '1' THEN 'YES' WHEN a.U_Traitflags_9 = 'Y' THEN 'YES' WHEN a.U_Traitflags_9 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_9], 
+CASE WHEN a.U_Traitflags_10 = '1' THEN 'YES' WHEN a.U_Traitflags_10 = 'Y' THEN 'YES' WHEN a.U_Traitflags_10 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_10],
+ CASE WHEN a.U_Traitflags_11 = '1' THEN 'YES' WHEN a.U_Traitflags_11 = 'Y' THEN 'YES' WHEN a.U_Traitflags_11 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_11], 
+ CASE WHEN a.U_Traitflags_12 = '1' THEN 'YES' WHEN a.U_Traitflags_12 = 'Y' THEN 'YES' WHEN a.U_Traitflags_12 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_12], 
+ CASE WHEN a.U_Traitflags_13 = '1' THEN 'YES' WHEN a.U_Traitflags_13 = 'Y' THEN 'YES' WHEN a.U_Traitflags_13 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_13], 
+ CASE WHEN a.U_Traitflags_14 = '1' THEN 'YES' WHEN a.U_Traitflags_14 = 'Y' THEN 'YES' WHEN a.U_Traitflags_14 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_14], 
+ CASE WHEN a.U_Traitflags_15 = '1' THEN 'YES' WHEN a.U_Traitflags_15 = 'Y' THEN 'YES' WHEN a.U_Traitflags_15 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_15], 
+ CASE WHEN a.U_Traitflags_16 = '1' THEN 'YES' WHEN a.U_Traitflags_16 = 'Y' THEN 'YES' WHEN a.U_Traitflags_16 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_16], 
+ CASE WHEN a.U_Traitflags_17 = '1' THEN 'YES' WHEN a.U_Traitflags_17 = 'Y' THEN 'YES' WHEN a.U_Traitflags_17 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_17], 
+ CASE WHEN a.U_Traitflags_18 = '1' THEN 'YES' WHEN a.U_Traitflags_18 = 'Y' THEN 'YES' WHEN a.U_Traitflags_18 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_18], 
+ CASE WHEN a.U_Traitflags_19 = '1' THEN 'YES' WHEN a.U_Traitflags_19 = 'Y' THEN 'YES' WHEN a.U_Traitflags_19 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_19], 
+ CASE WHEN a.U_Traitflags_20 = '1' THEN 'YES' WHEN a.U_Traitflags_20 = 'Y' THEN 'YES' WHEN a.U_Traitflags_20 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_20], 
+ CASE WHEN a.U_Traitflags_21 = '1' THEN 'YES' WHEN a.U_Traitflags_21 = 'Y' THEN 'YES' WHEN a.U_Traitflags_21 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_21], 
+ CASE WHEN a.U_Traitflags_22 = '1' THEN 'YES' WHEN a.U_Traitflags_22 = 'Y' THEN 'YES' WHEN a.U_Traitflags_22 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_22], 
+ CASE WHEN a.U_Traitflags_23 = '1' THEN 'YES' WHEN a.U_Traitflags_23 = 'Y' THEN 'YES' WHEN a.U_Traitflags_23 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_23], 
+ CASE WHEN a.U_Traitflags_24 = '1' THEN 'YES' WHEN a.U_Traitflags_24 = 'Y' THEN 'YES' WHEN a.U_Traitflags_24 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_24], 
+ CASE WHEN a.U_Traitflags_25 = '1' THEN 'YES' WHEN a.U_Traitflags_25 = 'Y' THEN 'YES' WHEN a.U_Traitflags_25 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_25], 
+ CASE WHEN a.U_Traitflags_26 = '1' THEN 'YES' WHEN a.U_Traitflags_26 = 'Y' THEN 'YES' WHEN a.U_Traitflags_26 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_26], 
+ CASE WHEN a.U_Traitflags_27 = '1' THEN 'YES' WHEN a.U_Traitflags_27 = 'Y' THEN 'YES' WHEN a.U_Traitflags_27 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_27], 
+ CASE WHEN a.U_Traitflags_28 = '1' THEN 'YES' WHEN a.U_Traitflags_28 = 'Y' THEN 'YES' WHEN a.U_Traitflags_28 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_28], 
+ CASE WHEN a.U_Traitflags_29 = '1' THEN 'YES' WHEN a.U_Traitflags_29 = 'Y' THEN 'YES' WHEN a.U_Traitflags_29 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_29], 
+ CASE WHEN a.U_Traitflags_30 = '1' THEN 'YES' WHEN a.U_Traitflags_30 = 'Y' THEN 'YES' WHEN a.U_Traitflags_30 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_30], 
+ CASE WHEN a.U_Traitflags_31 = '1' THEN 'YES' WHEN a.U_Traitflags_31 = 'Y' THEN 'YES' WHEN a.U_Traitflags_31 = 'N' THEN 'NO' ELSE 'NO'END[U_Traitflags_31], 
+ CASE WHEN a.U_Itemizer_1 = '1' THEN 'YES' WHEN a.U_Itemizer_1 = 'Y' THEN 'YES' WHEN a.U_Itemizer_1 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_1], 
+ CASE WHEN a.U_Itemizer_2 = '1' THEN 'YES' WHEN a.U_Itemizer_2 = 'Y' THEN 'YES' WHEN a.U_Itemizer_2 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_2], 
+ CASE WHEN a.U_Itemizer_3 = '1' THEN 'YES' WHEN a.U_Itemizer_3 = 'Y' THEN 'YES' WHEN a.U_Itemizer_3 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_3], 
+ CASE WHEN a.U_Itemizer_4 = '1' THEN 'YES' WHEN a.U_Itemizer_4 = 'Y' THEN 'YES' WHEN a.U_Itemizer_4 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_4], 
+ CASE WHEN a.U_Itemizer_5 = '1' THEN 'YES' WHEN a.U_Itemizer_5 = 'Y' THEN 'YES' WHEN a.U_Itemizer_5 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_5], 
+ CASE WHEN a.U_Itemizer_6 = '1' THEN 'YES' WHEN a.U_Itemizer_6 = 'Y' THEN 'YES' WHEN a.U_Itemizer_6 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_6], 
+ CASE WHEN a.U_Itemizer_7 = '1' THEN 'YES' WHEN a.U_Itemizer_7 = 'Y' THEN 'YES' WHEN a.U_Itemizer_7 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_7], 
+ CASE WHEN a.U_Itemizer_8 = '1' THEN 'YES' WHEN a.U_Itemizer_8 = 'Y' THEN 'YES' WHEN a.U_Itemizer_8 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_8], 
+ CASE WHEN a.U_Itemizer_9 = '1' THEN 'YES' WHEN a.U_Itemizer_9 = 'Y' THEN 'YES' WHEN a.U_Itemizer_9 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_9], 
+ CASE WHEN a.U_Itemizer_10 = '1' THEN 'YES' WHEN a.U_Itemizer_10 = 'Y' THEN 'YES' WHEN a.U_Itemizer_10 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_10], 
+ CASE WHEN a.U_Itemizer_11 = '1' THEN 'YES' WHEN a.U_Itemizer_11 = 'Y' THEN 'YES' WHEN a.U_Itemizer_11 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_11], 
+ CASE WHEN a.U_Itemizer_12 = '1' THEN 'YES' WHEN a.U_Itemizer_12 = 'Y' THEN 'YES' WHEN a.U_Itemizer_12 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_12], 
+ CASE WHEN a.U_Itemizer_13 = '1' THEN 'YES' WHEN a.U_Itemizer_13 = 'Y' THEN 'YES' WHEN a.U_Itemizer_13 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_13], 
+ CASE WHEN a.U_Itemizer_14 = '1' THEN 'YES' WHEN a.U_Itemizer_14 = 'Y' THEN 'YES' WHEN a.U_Itemizer_14 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_14], 
+ CASE WHEN a.U_Itemizer_15 = '1' THEN 'YES' WHEN a.U_Itemizer_15 = 'Y' THEN 'YES' WHEN a.U_Itemizer_15 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_15], 
+ CASE WHEN a.U_Itemizer_16 = '1' THEN 'YES' WHEN a.U_Itemizer_16 = 'Y' THEN 'YES' WHEN a.U_Itemizer_16 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_16], 
+ CASE WHEN a.U_Itemizer_17 = '1' THEN 'YES' WHEN a.U_Itemizer_17 = 'Y' THEN 'YES' WHEN a.U_Itemizer_17 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_17],
+ CASE WHEN a.U_Itemizer_18 = '1' THEN 'YES' WHEN a.U_Itemizer_18 = 'Y' THEN 'YES' WHEN a.U_Itemizer_18 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_18], 
+ CASE WHEN a.U_Itemizer_19 = '1' THEN 'YES' WHEN a.U_Itemizer_19 = 'Y' THEN 'YES' WHEN a.U_Itemizer_19 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_19], 
+ CASE WHEN a.U_Itemizer_20 = '1' THEN 'YES' WHEN a.U_Itemizer_20 = 'Y' THEN 'YES' WHEN a.U_Itemizer_20 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_20], 
+ CASE WHEN a.U_Itemizer_21 = '1' THEN 'YES' WHEN a.U_Itemizer_21 = 'Y' THEN 'YES' WHEN a.U_Itemizer_21 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_21],
+CASE WHEN a.U_Itemizer_22 = '1' THEN 'YES' WHEN a.U_Itemizer_22 = 'Y' THEN 'YES' WHEN a.U_Itemizer_22 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_22], 
+CASE WHEN a.U_Itemizer_23 = '1' THEN 'YES' WHEN a.U_Itemizer_23 = 'Y' THEN 'YES' WHEN a.U_Itemizer_23 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_23], 
+CASE WHEN a.U_Itemizer_24 = '1' THEN 'YES' WHEN a.U_Itemizer_24 = 'Y' THEN 'YES' WHEN a.U_Itemizer_24 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_24], 
+CASE WHEN a.U_Itemizer_25 = '1' THEN 'YES' WHEN a.U_Itemizer_25 = 'Y' THEN 'YES' WHEN a.U_Itemizer_25 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_25], 
+CASE WHEN a.U_Itemizer_26 = '1' THEN 'YES' WHEN a.U_Itemizer_26 = 'Y' THEN 'YES' WHEN a.U_Itemizer_26 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_26], 
+CASE WHEN a.U_Itemizer_27 = '1' THEN 'YES' WHEN a.U_Itemizer_27 = 'Y' THEN 'YES' WHEN a.U_Itemizer_27 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_27], 
+CASE WHEN a.U_Itemizer_28 = '1' THEN 'YES' WHEN a.U_Itemizer_28 = 'Y' THEN 'YES' WHEN a.U_Itemizer_28 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_28], 
+CASE WHEN a.U_Itemizer_29 = '1' THEN 'YES' WHEN a.U_Itemizer_29 = 'Y' THEN 'YES' WHEN a.U_Itemizer_29 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_29], 
+CASE WHEN a.U_Itemizer_30 = '1' THEN 'YES' WHEN a.U_Itemizer_30 = 'Y' THEN 'YES' WHEN a.U_Itemizer_30 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_30], 
+CASE WHEN a.U_Itemizer_31 = '1' THEN 'YES' WHEN a.U_Itemizer_31 = 'Y' THEN 'YES' WHEN a.U_Itemizer_31 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_31], 
+CASE WHEN a.U_Itemizer_32 = '1' THEN 'YES' WHEN a.U_Itemizer_32 = 'Y' THEN 'YES' WHEN a.U_Itemizer_32 = 'N' THEN 'NO' ELSE 'NO'END[U_Itemizer_32], 
+a.U_LstExtDt, a.U_ExtractItem, a.U_LastExtractTime, a.U_LastPrice, a.U_isExtrct, a.U_PullOut, a.U_ITMUDF1[U_ITMUDF1], a.U_ITMUDF2[U_ITMUDF2]
+, a.U_ITMUDF3[U_ITMUDF3],CASE WHEN a.U_ITMUDF4 = '&' THEN '$' ELSE '%'END[U_ITMUDF4], a.U_ITMUDF5[U_ITMUDF5], a.U_ITMUDF6[U_ITMUDF6], a.U_ITMUDF7[U_ITMUDF7], a.U_ITMUDF8[U_ITMUDF8]
+, a.U_ITMUDF9[U_ITMUDF9], a.U_ITMUDF10[U_ITMUDF10], a.U_ITMUDF11[U_ITMUDF11], a.U_ITMUDF12[U_ITMUDF12], a.U_ITMUDF13[U_ITMUDF13], a.U_ITMUDF14[U_ITMUDF14]
+, a.U_ITMUDF15[U_ITMUDF15], a.U_ITMUDF16[U_ITMUDF16], a.U_ITMUDF17[U_ITMUDF17], a.U_ITMUDF18[U_ITMUDF18], a.U_ITMUDF19[U_ITMUDF19], a.U_ITMUDF20[U_ITMUDF20]
+, a.U_ITMUDF21[U_ITMUDF21], a.U_ITMUDF22[U_ITMUDF22], a.U_ITMUDF23[U_ITMUDF23], a.U_ITMUDF24[U_ITMUDF24], a.U_ITMUDF25[U_ITMUDF25], a.U_ITMUDF26[U_ITMUDF26]
+, a.U_ITMUDF27[U_ITMUDF27], a.U_ITMUDF28[U_ITMUDF28], a.U_ITMUDF29[U_ITMUDF29], a.U_ITMUDF30[U_ITMUDF30], a.U_isExtract[U_isExtract], a.U_FileName[U_FileName]
+, a.U_FTDigSign[U_FTDigSign], a.U_ItmDiscPerc[U_ItmDiscPerc], a.InvntItem[Inventory Items], a.SellItem[Sales Items], a.PrchseItem[Purchase Items],a.ItmsGrpCod[Item Group] 
+FROM (SELECT ItemCode, [UomEntry], Price FROM ITM1 WHERE PriceList = 1 UNION SELECT ItemCode, UomEntry, Price FROM ITM9 WHERE PriceList = 1 ) i 
+INNER JOIN dbo.OBCD k ON i.ItemCode = k.ItemCode AND i.UomEntry = k.UomEntry
+INNER JOIN dbo.OUOM l ON i.UomEntry = l.UomEntry
+INNER JOIN dbo.OITM a ON i.ItemCode = a.ItemCode
+INNER JOIN dbo.OCRD b ON b.CardCode = a.CardCode 
+LEFT JOIN dbo.ITM1 g ON a.ItemCode = g.ItemCode AND g.PriceList = 3 
+LEFT JOIN dbo.ITM1 h ON a.ItemCode = h.ItemCode AND h.PriceList = 4 
+LEFT JOIN dbo.OWHS d ON a.DfltWH = d.WhsCode 
+LEFT JOIN dbo.OUGP f ON a.UgpEntry = f.UgpEntry
+LEFT JOIN dbo.UGP1 m ON m.UgpEntry = f.UgpEntry AND m.UomEntry = l.UomEntry 
+LEFT JOIN (
+Select a.itemcode, b.itemname, a.price, b.iuomentry as 'UOMentry', a.PriceList  from ITM1 a
+left join OITM b on a.itemcode = b.itemcode
+where a.pricelist in ('28')
+union all
+Select a.itemcode, b.itemname, a.price, a.UomEntry, a.PriceList from ITM9 a
+left join OITM b on a.itemcode = b.itemcode
+where a.pricelist in ('28')) x on x.ItemCode = a.ItemCode and x.UomEntry = m.UOMentry
+WHERE not (k.BcdCode like '%-%'or k.BcdCode like '%[A-Z]%')
+END

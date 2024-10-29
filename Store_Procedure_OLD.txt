@@ -1,0 +1,118 @@
+USE [023_RCS_ALIAGA_V10]
+GO
+/****** Object:  StoredProcedure [dbo].[RCS_Extract_Product_Update]    Script Date: 8/1/2024 8:40:34 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[RCS_Extract_Product_Update] 
+
+@BPVendor nvarchar (100) 
+,@Division nvarchar (50) 
+,@Department nvarchar(50)
+,@Section nvarchar (50) 
+,@Category nvarchar(50)
+,@Date nvarchar(50)
+
+AS
+BEGIN
+select 
+AITM.ItemCode,
+AITM.ItemName,
+OUOM.UomCode 'Uom',
+
+case when OBSP.Price = NBSP.Price then 0 else OBSP.Price end 'Old Price',
+case when OBSP.Price = NBSP.Price then 0 else NBSP.Price end 'New Price',
+case when OBSP.Price <> NBSP.Price then 'Change BSP'
+when Old.itemname <> new.itemname then 'Change Description'
+when OBSP.Price <> NBSP.Price and Old.itemname <> new.itemname then 'Change BSP & Description' end as 'Status',
+
+Old.ItemName 'Old Name',
+New.ItemName 'New Name',
+Div.Code'CodeDiv',
+Dept.Code'CodeDept',
+Sec.Code'CodeSec',
+Cat.Code'CodeCat',
+OCRD.CardCode 'CardCode',
+OCRD.CardName 'CardName',
+AITM.UpdateDate,
+
+cast(cat.Code as int) 'CategorySort',
+
+Case when OITM.U_Itemizer_21 = '1' then 'Y' else 'N' end as 'Assign Barcode',
+Case when OITM.U_Itemizer_21 = '1' then '1' else '0' end as 'Assign Barcode Count',
+case when OITM.Itemname like '*%' then '1' else '0' end as 'Promo Items',
+Case When (SELECT TOP 1 CASE WHEN ougp.UgpName = 'PCS' or ougp.UgpName = 'PI' THEN '-' ELSE OBCD.BcdCode END
+ 
+FROM OUGP INNER JOIN UGP1 ON OUGP.UgpEntry = UGP1.UgpEntry
+INNER JOIN OBCD ON UGP1.UomEntry = OBCD.UomEntry
+WHERE OUGP.UgpEntry = OITM.UgpEntry AND OBCD.ItemCode = OITM.ItemCode
+ORDER BY UGP1.BaseQty DESC) = '' or (SELECT TOP 1 CASE WHEN ougp.UgpName = 'PCS' or ougp.UgpName = 'PI' THEN '-' ELSE OBCD.BcdCode END
+
+FROM OUGP INNER JOIN UGP1 ON OUGP.UgpEntry = UGP1.UgpEntry
+INNER JOIN OBCD ON UGP1.UomEntry = OBCD.UomEntry
+WHERE OUGP.UgpEntry = OITM.UgpEntry AND OBCD.ItemCode = OITM.ItemCode
+ORDER BY UGP1.BaseQty DESC) = '-' then 1 else 0 end as 'No Case Code',
+
+(SELECT TOP 1 OUGP.UGPName 
+FROM OUGP INNER JOIN UGP1 ON OUGP.UgpEntry = UGP1.UgpEntry
+INNER JOIN OBCD ON UGP1.UomEntry = OBCD.UomEntry
+WHERE OUGP.UgpEntry = OITM.UgpEntry AND OBCD.ItemCode = OITM.ItemCode
+ORDER BY UGP1.BaseQty ASC) 'PCS Uom',
+
+(SELECT TOP 1 OUGP.BaseUom
+FROM OUGP INNER JOIN UGP1 ON OUGP.UgpEntry = UGP1.UgpEntry
+INNER JOIN OBCD ON UGP1.UomEntry = OBCD.UomEntry
+WHERE OUGP.UgpEntry = OITM.UgpEntry AND OBCD.ItemCode = OITM.ItemCode
+ORDER BY UGP1.BaseQty ASC) 'Base Qty',
+
+OITM.StockValue 'Stock Level',
+
+OITM.U_ITMUDF1[U_ITMUDF1], OITM.U_ITMUDF2[U_ITMUDF2], OITM.U_ITMUDF3[U_ITMUDF3], OITM.U_ITMUDF4[U_ITMUDF4], 
+OITM.U_ITMUDF5[U_ITMUDF5], OITM.U_ITMUDF6[U_ITMUDF6], OITM.U_ITMUDF7[U_ITMUDF7], OITM.U_ITMUDF8[U_ITMUDF8], 
+OITM.U_ITMUDF9[U_ITMUDF9], OITM.U_ITMUDF10[U_ITMUDF10], OITM.U_ITMUDF11[U_ITMUDF11], OITM.U_ITMUDF12[U_ITMUDF12], 
+OITM.U_ITMUDF13[U_ITMUDF13], OITM.U_ITMUDF14[U_ITMUDF14], OITM.U_ITMUDF15[U_ITMUDF15], OITM.U_ITMUDF16[U_ITMUDF16], 
+OITM.U_ITMUDF17[U_ITMUDF17], OITM.U_ITMUDF18[U_ITMUDF18], OITM.U_ITMUDF19[U_ITMUDF19], OITM.U_ITMUDF20[U_ITMUDF20], 
+OITM.U_ITMUDF21[U_ITMUDF21], OITM.U_ITMUDF22[U_ITMUDF22], OITM.U_ITMUDF23[U_ITMUDF23], OITM.U_ITMUDF24[U_ITMUDF24], 
+OITM.U_ITMUDF25[U_ITMUDF25], OITM.U_ITMUDF26[U_ITMUDF26], OITM.U_ITMUDF27[U_ITMUDF27], OITM.U_ITMUDF28[U_ITMUDF28], 
+OITM.U_ITMUDF29[U_ITMUDF29], OITM.U_ITMUDF30[U_ITMUDF30]
+from AITM
+inner join OITM on AITM.ItemCode = OITM.ItemCode
+inner join ocrd on oitm.cardcode = ocrd.cardcode
+inner join (select ItemCode, min(UomEntry)'UomEntry' from obcd GROUP BY iTEMCODE) OBCD on AITM.ItemCode = OBCD.ItemCode
+inner join OUOM on OBCD.UomEntry = OUOM.UomEntry
+
+inner join (select max(AITM.loginstanc)'loginstanc',
+			AIT1.itemcode from Ait1 
+			left join AITM on AIT1.Itemcode = AITM.ItemCode where AITM.UpdateDate = @Date and AITM.Codebars is null 
+			group by AIT1.ItemCode)
+
+AIT1 on AITM.ItemCode = AIT1.ItemCode and AITM.LogInstanc = AIT1.Loginstanc
+inner join (select max(AITM.loginstanc)'loginstanc',AITM.itemcode from AITM group by ItemCode) AITM1 on AITM.ItemCode = AITM1.ItemCode 
+left join AIT1 OBSP on AIT1.Itemcode = OBSP.ItemCode and OBSP.Pricelist = (select OPLN.ListNum from OPLN where OPLN.U_BranchCode = (Select convert(varchar(10),a.AliasName) from OADM a)) and OBSP.Loginstanc = (AIT1.loginstanc-1)
+left join AIT1 NBSP on AIT1.Itemcode = NBSP.ItemCode and NBSP.Pricelist = (select OPLN.ListNum from OPLN where OPLN.U_BranchCode = (Select convert(varchar(10),a.AliasName) from OADM a)) and NBSP.Loginstanc = AIT1.loginstanc
+
+left join AITM Old on AITM.Itemcode = old.ItemCode and OLD.LogInstanc = (AITM1.loginstanc-1)
+left join AITM New on AITM.Itemcode = New.ItemCode and New.LogInstanc = AITM1.loginstanc
+
+
+
+
+left join [@Division] Div on OITM.U_Division = Div.Code
+left join [@DEPARTMENT] Dept on OITM.U_Department = Dept.Code
+left join [@SECTION] Sec on OITM.U_Section = sec.Code
+left join [@Category] Cat on OITM.U_Category = cat.Code
+,OADM,ADM1,OADP
+
+
+where AITM.UpdateDate = @Date
+and OCRD.CardCode = case when @BPVendor = 'All' then OCRD.CardCode else @BPVendor end
+and Div.Name = case when @Division = 'All' then Div.Name else @Division end
+and Dept.Name = case when @Department = 'All' then Dept.Name else @Department end
+and Sec.Name = case when @Section = 'All' then Sec.Name else @Section end
+and cat.Name = case when @Category = 'All' then Cat.Name else @Category end
+and OBSP.Price is not null -- new Item
+and case when OBSP.Price <> NBSP.Price and Old.itemname <> new.itemname then 'Change BSP & Description'
+when OBSP.Price <> NBSP.Price then 'Change BSP'
+when Old.itemname <> new.itemname then 'Change Description' end is not null
+END
